@@ -199,12 +199,12 @@ try {
   spike(-.42,.43,.03,.82,.8,-.1,-.85);
   spike(.42,.43,.03,.82,.8,.1,.85);
   // expressive eyes, brows, nose and mouth
-  sphere(head,eyeWhite,[-.16,.02,.345],[.105,.065,.045]);sphere(head,eyeWhite,[.16,.02,.345],[.105,.065,.045]);
+  const eyeLeft=sphere(head,eyeWhite,[-.16,.02,.345],[.105,.065,.045]);const eyeRight=sphere(head,eyeWhite,[.16,.02,.345],[.105,.065,.045]);
   sphere(head,iris,[-.15,.015,.388],[.035,.045,.018]);sphere(head,iris,[.17,.015,.388],[.035,.045,.018]);
   limb(head,dark,[-.27,.14,.35],[-.07,.17,.36],.035,.028);
   limb(head,dark,[.07,.17,.36],[.27,.14,.35],.028,.035);
   sphere(head,skin,[0,-.12,.365],[.07,.10,.07]);
-  limb(head,dark,[-.09,-.27,.33],[.09,-.27,.33],.018,.018);
+  const mouth=sphere(head,dark,[0,-.27,.36],[.09,.018,.02]);
   // muscular arms, blue wrist bands and fists
   const arms=[];
   for(const side of [-1,1]){
@@ -244,11 +244,11 @@ try {
     if(state==='listening'){head.rotation.y=Math.sin(s*2.8)*.14;head.rotation.x=-.06;}
     else if(state==='thinking'){head.rotation.y=Math.sin(s*1.6)*.18;head.rotation.z=Math.sin(s*1.8)*.04;}
     else{head.rotation.x=0;head.rotation.y=Math.sin(s*.65)*.055;head.rotation.z=0;}
-    if(state==='speaking'){head.children[13].scale.y=.04+Math.abs(Math.sin(s*15))*.07;}
-    else head.children[13].scale.y=.035;
+    if(state==='speaking'){mouth.scale.y=.018+Math.abs(Math.sin(s*15))*.055;}
+    else mouth.scale.y=.018;
     if(s>blinkAt){blinkEnd=s+.13;blinkAt=s+2.4+Math.random()*2.7;}
     const blinkScale=s<blinkEnd?.08:1;
-    head.children[8].scale.y=.065*blinkScale;head.children[9].scale.y=.065*blinkScale;
+    eyeLeft.scale.y=.065*blinkScale;eyeRight.scale.y=.065*blinkScale;
     renderer.render(scene,camera);
   }
   requestAnimationFrame(animate);
