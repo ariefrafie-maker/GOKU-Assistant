@@ -29,7 +29,9 @@
     .avatar-stage.speaking .mouth{animation:talk .22s ease-in-out infinite alternate}
     .avatar-stage.listening{filter:drop-shadow(0 0 14px #4da8ff)}
     .avatar-stage.thinking .goku-avatar{animation:think-spin 2.4s ease-in-out infinite}
-    #goku3d{width:100%;height:100%;display:block;position:absolute;inset:0;z-index:2;touch-action:pan-y}\n    .avatar-stage.webgl-ready .goku-avatar{display:none}\n    #avatarStatus{font-size:12px;color:#b9d1e9;margin:0 0 12px}
+    #goku3d{width:100%;height:100%;display:block;position:absolute;inset:0;z-index:2;touch-action:pan-y}
+    .avatar-stage.webgl-ready .goku-avatar{display:none}
+    #avatarStatus{font-size:12px;color:#b9d1e9;margin:0 0 12px}
     @keyframes goku-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
     @keyframes shadow-pulse{0%,100%{transform:scaleX(1);opacity:.6}50%{transform:scaleX(.78);opacity:.35}}
     @keyframes arm-left{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-12deg)}}
@@ -60,7 +62,7 @@
 <div class="wrap">
   <header><div class="mark">G</div><div><h1>GOKU AI</h1><p>Asisten Pribadi • Indonesia & Palembang</p></div><div class="status" id="net">Memeriksa koneksi…</div></header>
   <section class="hero">
-    <div class="avatar-stage" id="avatarStage" aria-label="Karakter 3D GOKU AI sedang bergerak"><canvas id="goku3d" aria-label="Avatar GOKU tiga dimensi"></canvas><svg class="goku-avatar" viewBox="0 0 132 142" role="img" aria-label="Karakter robot asisten GOKU"><defs><linearGradient id="gHead" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0bd"/><stop offset="1" stop-color="#d99532"/></linearGradient><linearGradient id="gBody" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4da8ff"/><stop offset="1" stop-color="#174b79"/></linearGradient></defs><g class="leg-left"><path d="M54 105 L51 127 Q50 133 57 133 L65 133 L66 109Z" fill="#d8e7f5" stroke="#7896b3" stroke-width="2"/><path d="M51 127 L47 135 Q46 139 52 139 H66 Q69 135 64 132" fill="#f5c45b"/></g><g class="leg-right"><path d="M72 108 L77 127 Q78 133 72 134 L64 132 L64 109Z" fill="#d8e7f5" stroke="#7896b3" stroke-width="2"/><path d="M77 127 L82 135 Q83 139 77 139 H64 Q61 135 66 132" fill="#f5c45b"/></g><path d="M49 70 Q66 63 83 70 L88 108 Q66 117 44 108Z" fill="url(#gBody)" stroke="#9acfff" stroke-width="2"/><path d="M58 79 L74 79 L78 99 L54 99Z" fill="#10263d" stroke="#f5c45b" stroke-width="2"/><circle cx="66" cy="89" r="6" fill="#f5c45b"/><g class="arm-left"><path d="M48 74 L35 91 L28 105" fill="none" stroke="#d8e7f5" stroke-width="10" stroke-linecap="round"/><circle cx="27" cy="108" r="7" fill="#f5c45b"/></g><g class="arm-right"><path d="M84 74 L97 91 L104 105" fill="none" stroke="#d8e7f5" stroke-width="10" stroke-linecap="round"/><circle cx="105" cy="108" r="7" fill="#f5c45b"/></g><path d="M55 65 L55 73 L77 73 L77 65" fill="#d99532"/><rect x="42" y="20" width="48" height="49" rx="17" fill="url(#gHead)" stroke="#fff0bd" stroke-width="2"/><path d="M43 36 Q66 6 89 36 L84 27 Q66 12 48 27Z" fill="#173b5c"/><g class="eyes"><ellipse cx="56" cy="45" rx="4" ry="5" fill="#10263d"/><ellipse cx="76" cy="45" rx="4" ry="5" fill="#10263d"/><circle cx="57" cy="43" r="1.3" fill="#fff"/><circle cx="77" cy="43" r="1.3" fill="#fff"/></g><path d="M62 53 Q66 56 70 53" class="mouth" fill="none" stroke="#8c4b20" stroke-width="2.4" stroke-linecap="round"/><path d="M40 38 L32 32 M92 38 L100 32" stroke="#f5c45b" stroke-width="4" stroke-linecap="round"/><circle cx="66" cy="13" r="4" fill="#4da8ff"/></svg></div><p id="avatarStatus" aria-live="polite">GOKU siap menyapa Anda</p>
+    <div class="avatar-stage" id="avatarStage" aria-label="Karakter 3D GOKU AI sedang bergerak"><canvas id="goku3d" aria-label="Avatar GOKU tiga dimensi"></canvas><svg class="goku-avatar" viewBox="0 0 132 142" role="img" aria-label="Fallback avatar GOKU"><defs><linearGradient id="gHead" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0bd"/><stop offset="1" stop-color="#d99532"/></linearGradient><linearGradient id="gBody" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4da8ff"/><stop offset="1" stop-color="#174b79"/></linearGradient></defs><g class="leg-left"><path d="M54 105 L51 127 Q50 133 57 133 L65 133 L66 109Z" fill="#d8e7f5" stroke="#7896b3" stroke-width="2"/><path d="M51 127 L47 135 Q46 139 52 139 H66 Q69 135 64 132" fill="#f5c45b"/></g><g class="leg-right"><path d="M72 108 L77 127 Q78 133 72 134 L64 132 L64 109Z" fill="#d8e7f5" stroke="#7896b3" stroke-width="2"/><path d="M77 127 L82 135 Q83 139 77 139 H64 Q61 135 66 132" fill="#f5c45b"/></g><path d="M49 70 Q66 63 83 70 L88 108 Q66 117 44 108Z" fill="url(#gBody)" stroke="#9acfff" stroke-width="2"/><path d="M58 79 L74 79 L78 99 L54 99Z" fill="#10263d" stroke="#f5c45b" stroke-width="2"/><circle cx="66" cy="89" r="6" fill="#f5c45b"/><g class="arm-left"><path d="M48 74 L35 91 L28 105" fill="none" stroke="#d8e7f5" stroke-width="10" stroke-linecap="round"/><circle cx="27" cy="108" r="7" fill="#f5c45b"/></g><g class="arm-right"><path d="M84 74 L97 91 L104 105" fill="none" stroke="#d8e7f5" stroke-width="10" stroke-linecap="round"/><circle cx="105" cy="108" r="7" fill="#f5c45b"/></g><path d="M55 65 L55 73 L77 73 L77 65" fill="#d99532"/><rect x="42" y="20" width="48" height="49" rx="17" fill="url(#gHead)" stroke="#fff0bd" stroke-width="2"/><path d="M43 36 Q66 6 89 36 L84 27 Q66 12 48 27Z" fill="#173b5c"/><g class="eyes"><ellipse cx="56" cy="45" rx="4" ry="5" fill="#10263d"/><ellipse cx="76" cy="45" rx="4" ry="5" fill="#10263d"/><circle cx="57" cy="43" r="1.3" fill="#fff"/><circle cx="77" cy="43" r="1.3" fill="#fff"/></g><path d="M62 53 Q66 56 70 53" class="mouth" fill="none" stroke="#8c4b20" stroke-width="2.4" stroke-linecap="round"/><path d="M40 38 L32 32 M92 38 L100 32" stroke="#f5c45b" stroke-width="4" stroke-linecap="round"/><circle cx="66" cy="13" r="4" fill="#4da8ff"/></svg></div><p id="avatarStatus" aria-live="polite">GOKU siap menyapa Anda</p>
     <h2>Halo, Arief!</h2>
     <p>Saya GOKU. Siap membantu percakapan dan pekerjaan harian Anda.</p>
     <div class="tools">
@@ -94,7 +96,9 @@ Catatan: ini versi awal PWA. Koneksi ke mesin AI online belum diaktifkan.</div><
 </div>
 <script>
 const $=s=>document.querySelector(s), messages=$('#messages');
-let lastReply='Halo Arief! Ada yang bisa saya bantu?', recognition=null, deferredInstall=null;\nconst avatarStage=$('#avatarStage'), avatarStatus=$('#avatarStatus');\nfunction setAvatarState(state){avatarStage.classList.remove('speaking','listening','thinking');if(state)avatarStage.classList.add(state);if(window.setGokuAvatarState)window.setGokuAvatarState(state||'idle');avatarStatus.textContent=state==='speaking'?'GOKU sedang berbicara…':state==='listening'?'GOKU sedang mendengarkan…':state==='thinking'?'GOKU sedang berpikir…':'GOKU siap menyapa Anda';}
+let lastReply='Halo Arief! Ada yang bisa saya bantu?', recognition=null, deferredInstall=null;
+const avatarStage=$('#avatarStage'), avatarStatus=$('#avatarStatus');
+function setAvatarState(state){avatarStage.classList.remove('speaking','listening','thinking');if(state)avatarStage.classList.add(state);if(window.setGokuAvatarState)window.setGokuAvatarState(state||'idle');avatarStatus.textContent=state==='speaking'?'GOKU sedang berbicara…':state==='listening'?'GOKU sedang mendengarkan…':state==='thinking'?'GOKU sedang berpikir…':'GOKU siap menyapa Anda';}
 const chatHistory=[];
 const endpointInput=$('#apiEndpoint'), accessInput=$('#accessCode'), connectionStatus=$('#connectionStatus');
 endpointInput.value=localStorage.getItem('goku_endpoint')||'';
@@ -236,12 +240,28 @@ try {
   // Subtle ground glow, not a mechanical platform
   const aura=new THREE.Mesh(new THREE.CircleGeometry(.92,48),new THREE.MeshBasicMaterial({color:0x9bcfff,transparent:true,opacity:.23,blending:THREE.AdditiveBlending}));
   aura.rotation.x=-Math.PI/2;aura.position.y=-.12;root.add(aura);
-  let state='idle',last=0,blinkAt=2.5,blinkEnd=0;
+  const attackGroup=new THREE.Group();scene.add(attackGroup);
+  const chargeMat=new THREE.MeshBasicMaterial({color:0xeaf7ff,transparent:true,opacity:0,blending:THREE.AdditiveBlending});
+  const chargeOrb=new THREE.Mesh(new THREE.SphereGeometry(.22,24,18),chargeMat);chargeOrb.position.set(0,1.48,.88);attackGroup.add(chargeOrb);
+  const beamMat=new THREE.MeshBasicMaterial({color:0xc8e8ff,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false});
+  const beam=new THREE.Mesh(new THREE.CylinderGeometry(.10,.18,4.8,24,1,true),beamMat);beam.rotation.x=Math.PI/2;beam.position.set(0,1.48,3.0);attackGroup.add(beam);
+  const beamCoreMat=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,blending:THREE.AdditiveBlending});
+  const beamCore=new THREE.Mesh(new THREE.CylinderGeometry(.035,.07,4.7,16,1,true),beamCoreMat);beamCore.rotation.x=Math.PI/2;beamCore.position.set(0,1.48,3.0);attackGroup.add(beamCore);
+  let state='idle',last=0,blinkAt=2.5,blinkEnd=0,attackStart=-1;
   window.setGokuAvatarState=(s)=>{state=s||'idle';};
   const resize=()=>{const w=stage.clientWidth||240,h=stage.clientHeight||230;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
   new ResizeObserver(resize).observe(stage);resize();stage.classList.add('webgl-ready');
   function animate(t){
     requestAnimationFrame(animate);const s=t/1000;last=s;
+    if(attackStart<0 && s>8 && s%19<.035 && state==='idle') attackStart=s;
+    let attackPhase=0;
+    if(attackStart>=0){const elapsed=s-attackStart;attackPhase=elapsed<1.25?1:elapsed<2.45?2:0;if(elapsed>=2.45)attackStart=-1;}
+    chargeMat.opacity=attackPhase===1?.45+.4*Math.sin(s*18):0;
+    chargeOrb.scale.setScalar(attackPhase===1?.75+Math.abs(Math.sin(s*17))*.65:.001);
+    beamMat.opacity=attackPhase===2?.78:0;beamCoreMat.opacity=attackPhase===2?1:0;
+    beam.scale.set(attackPhase===2?1:.001,attackPhase===2?1:.001,1);
+    beamCore.scale.set(attackPhase===2?1:.001,attackPhase===2?1:.001,1);
+    if(attackPhase){root.rotation.y=Math.sin(s*8)*.025;arms[0].rotation.z=-.72;arms[1].rotation.z=.72;}
     root.position.y=.035+Math.sin(s*2.1)*.035;
     auraGroup.position.y=.02+Math.sin(s*2.7)*.045;auraShell.scale.set(.88+Math.sin(s*3)*.045,1.72+Math.sin(s*2.2)*.06,.46);
     auraRings.forEach((r,i)=>{r.rotation.y=s*(i%2?-.55:.42);r.rotation.x=Math.sin(s*1.7+i)*.16;});
@@ -263,7 +283,7 @@ try {
   requestAnimationFrame(animate);
 }catch(err){
   const status=document.getElementById('avatarStatus');
-  if(status)status.textContent='Karakter GOKU manusia 3D belum dapat dimuat pada browser ini.';
+  if(status)status.textContent='Avatar 3D memerlukan browser yang mendukung WebGL dan koneksi internet.';
   console.warn('GOKU human 3D:',err);
 }
 </script></body></html>
