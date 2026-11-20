@@ -151,7 +151,20 @@ $('#clear').addEventListener('click',()=>{messages.innerHTML='';add('Percakapan 
 window.addEventListener('online',()=>$('#net').textContent='Online');window.addEventListener('offline',()=>$('#net').textContent='Offline');$('#net').textContent=navigator.onLine?'Online':'Offline';
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$('#install').hidden=false});
 $('#install').addEventListener('click',async()=>{if(!deferredInstall){add('Di Chrome Android: menu ⋮ → Tambahkan ke layar utama / Install aplikasi.','bot');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$('#install').hidden=true});
-if('serviceWorker'in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker'in navigator && location.protocol.startsWith('http')){
+ let refreshing=false;
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;location.reload();}});
+ navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{
+   reg.update().catch(()=>{});
+   if(reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+   reg.addEventListener('updatefound',()=>{
+     const worker=reg.installing;
+     if(worker) worker.addEventListener('statechange',()=>{
+       if(worker.state==='installed' && navigator.serviceWorker.controller) worker.postMessage('SKIP_WAITING');
+     });
+   });
+ }).catch(()=>{});
+}
 </script>
 
 <script type="module">
