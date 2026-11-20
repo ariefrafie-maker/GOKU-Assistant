@@ -17,7 +17,7 @@
     .status{margin-left:auto;border:1px solid #31516f;border-radius:99px;padding:6px 10px;color:#b7d8ff;font-size:11px;white-space:nowrap}
     .hero{border:1px solid var(--line);border-radius:22px;padding:22px;background:linear-gradient(140deg,#142b46,#0c192b);text-align:center}
     .orb{width:94px;height:94px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:38px;background:radial-gradient(circle at 35% 30%,#fff3c5,#e5a83a 40%,#75421c 80%);box-shadow:0 0 35px #e5a83a55}
-    .avatar-stage{width:100%;max-width:260px;height:230px;margin:0 auto 10px;position:relative;display:grid;place-items:center}
+    .avatar-stage{width:100%;max-width:340px;height:350px;margin:0 auto 10px;position:relative;display:grid;place-items:center}
     .avatar-stage:after{content:"";position:absolute;bottom:5px;width:94px;height:13px;border-radius:50%;background:#02091488;filter:blur(5px);animation:shadow-pulse 1.8s ease-in-out infinite}
     .goku-avatar{width:132px;height:142px;position:relative;z-index:1;overflow:visible;animation:goku-bob 1.8s ease-in-out infinite;transform-origin:50% 90%}
     .goku-avatar .arm-left{transform-origin:45px 75px;animation:arm-left 1.1s ease-in-out infinite}
@@ -177,7 +177,7 @@ try {
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(31,stage.clientWidth/stage.clientHeight,.1,100);
-  camera.position.set(0,1.65,7.7);camera.lookAt(0,1.45,0);
+  camera.position.set(0,1.72,6.35);camera.lookAt(0,1.58,0);
   scene.add(new THREE.HemisphereLight(0xe9f3ff,0x46301d,2.0));
   const key=new THREE.DirectionalLight(0xffe0b5,3.2);key.position.set(-3,5,5);scene.add(key);
   const fill=new THREE.DirectionalLight(0x7bbcff,1.2);fill.position.set(4,2,2);scene.add(fill);
@@ -202,15 +202,15 @@ try {
   const cylinder=(p,m,r1,r2,h,pos)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,20),m);o.position.set(...pos);p.add(o);return o};
   const limb=(p,m,a,b,rA,rB)=>{const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),d=new THREE.Vector3().subVectors(B,A);const o=new THREE.Mesh(new THREE.CylinderGeometry(rB,rA,d.length(),18),m);o.position.copy(A).add(B).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());p.add(o);return o};
   // Adult human fighter proportions: orange gi, blue undershirt, natural skin and spiky black hair.
-  sphere(root,orange,[0,1.48,0],[.57,.72,.34]); // gi torso
-  sphere(root,blue,[0,1.76,.025],[.39,.40,.355]); // blue undershirt at collar/chest
+  sphere(root,orange,[0,1.48,0],[.62,.77,.36]); // gi torso
+  sphere(root,blue,[0,1.80,.025],[.42,.42,.37]); // blue undershirt at collar/chest
   // Orange gi front panels
-  const giPanel=sphere(root,orange,[0,1.43,.275],[.46,.54,.11]);
+  const giPanel=sphere(root,orange,[0,1.43,.29],[.49,.57,.12]);
   cylinder(root,beltMat,.43,.43,.13,[0,.92,0]);
   sphere(root,blue,[0,.92,.33],[.12,.07,.045]);
   cylinder(root,skin,.17,.17,.22,[0,2.12,0]);
   // neck and head
-  const head=new THREE.Group();head.position.set(0,2.48,.02);root.add(head);
+  const head=new THREE.Group();head.position.set(0,2.52,.02);head.scale.set(.86,.91,.88);root.add(head);
   sphere(head,skin,[0,0,0],[.43,.53,.38]);
   sphere(head,skin,[-.43,-.02,0],[.09,.15,.12]);sphere(head,skin,[.43,-.02,0],[.09,.15,.12]);
   // hair cap and unmistakable upright spikes
