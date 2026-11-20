@@ -29,6 +29,7 @@
     .composer{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}input{min-width:0;flex:1;background:#081525;color:#fff;border:1px solid #2b4764;border-radius:13px;padding:12px;font:inherit}
     .settings{margin-top:15px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.setting{background:#0e1d30;border:1px solid var(--line);border-radius:15px;padding:12px}.setting label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}.setting select{width:100%;padding:9px}
     .notice{margin-top:14px;color:#9fb3c9;font-size:12px;line-height:1.5;text-align:center}
+    .connection{margin-top:14px;background:#0e1d30;border:1px solid var(--line);border-radius:15px;padding:14px}.connection label{display:block;color:var(--muted);font-size:12px;margin:10px 0 6px}.connection input{width:100%;min-height:42px}.connection .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.connection small{display:block;color:var(--muted);line-height:1.45;margin-top:8px}
     footer{text-align:center;color:#71869d;font-size:11px;margin-top:20px}
     @media(max-width:480px){.wrap{padding:14px 12px}.status{font-size:10px}.settings{grid-template-columns:1fr}#messages{height:280px}.composer button{padding:10px}}
   </style>
@@ -57,12 +58,41 @@ Catatan: ini versi awal PWA. Koneksi ke mesin AI online belum diaktifkan.</div><
     <div class="setting"><label for="language">Gaya bahasa</label><select id="language"><option value="id">Bahasa Indonesia</option><option value="palembang">Baso Palembang</option><option value="mix">Campuran Indonesia–Palembang</option></select></div>
     <div class="setting"><label for="voice">Bahasa suara</label><select id="voice"><option value="id-ID">Indonesia</option><option value="en-US">English (opsional)</option></select></div>
   </section>
-  <p class="notice">Mikrofon dan suara bergantung pada dukungan browser serta izin perangkat. Jangan masukkan kata sandi, PIN, atau data rahasia.</p>
+  <section class="connection">
+    <strong>Hubungkan otak AI GOKU</strong>
+    <label for="apiEndpoint">Alamat server GOKU (Cloudflare Worker)</label>
+    <input id="apiEndpoint" type="url" inputmode="url" placeholder="https://nama-worker.nama-akun.workers.dev">
+    <label for="accessCode">Kode akses GOKU</label>
+    <input id="accessCode" type="password" autocomplete="off" placeholder="Kode akses yang Anda buat di Cloudflare">
+    <div class="actions"><button class="primary" id="saveConnection" type="button">Simpan koneksi</button><button id="testConnection" type="button">Tes koneksi</button></div>
+    <small id="connectionStatus">Belum dikonfigurasi. Alamat server dan kode akses disimpan hanya pada perangkat ini. Jangan masukkan API key Groq di sini.</small>
+  </section>
+  <p class="notice">Mikrofon dan suara bergantung pada dukungan browser serta izin perangkat. Jangan masukkan kata sandi akun, PIN, atau API key di chat.</p>
   <footer>GOKU AI • Versi awal • Dibuat untuk Arief</footer>
 </div>
 <script>
 const $=s=>document.querySelector(s), messages=$('#messages');
 let lastReply='Halo Arief! Ada yang bisa saya bantu?', recognition=null, deferredInstall=null;
+const chatHistory=[];
+const endpointInput=$('#apiEndpoint'), accessInput=$('#accessCode'), connectionStatus=$('#connectionStatus');
+endpointInput.value=localStorage.getItem('goku_endpoint')||'';
+accessInput.value=localStorage.getItem('goku_access_code')||'';
+function saveConnection(){
+ const endpoint=endpointInput.value.trim().replace(/\/$/,'');
+ if(endpoint && !/^https:\/\//i.test(endpoint)){connectionStatus.textContent='Alamat server harus diawali https://';return false}
+ localStorage.setItem('goku_endpoint',endpoint);localStorage.setItem('goku_access_code',accessInput.value);
+ connectionStatus.textContent=endpoint?'Pengaturan tersimpan di perangkat ini.':'Alamat server belum diisi.';return true;
+}
+$('#saveConnection').addEventListener('click',saveConnection);
+async function callGoku(message){
+ const endpoint=localStorage.getItem('goku_endpoint'), code=localStorage.getItem('goku_access_code');
+ if(!endpoint||!code)throw new Error('Koneksi AI belum diatur. Isi alamat Cloudflare Worker dan kode akses pada bagian Hubungkan otak AI GOKU.');
+ const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+code},body:JSON.stringify({message,language:$('#language').value,history:chatHistory})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(data.error||('Server merespons '+response.status));
+ if(typeof data.reply!=='string'||!data.reply.trim())throw new Error('Jawaban AI kosong. Coba ulangi.');return data.reply.trim();
+}
+$('#testConnection').addEventListener('click',async()=>{if(!saveConnection())return;connectionStatus.textContent='Menguji koneksi…';try{const r=await callGoku('Balas singkat: koneksi GOKU berhasil.');connectionStatus.textContent='Terhubung! AI menjawab: '+r.slice(0,120)}catch(e){connectionStatus.textContent='Tes gagal: '+e.message}});
 function add(text,who){const d=document.createElement('div');d.className='msg '+who;d.textContent=text;messages.appendChild(d);messages.scrollTop=messages.scrollHeight;return d}
 function replyFor(text){
  const t=text.toLowerCase(), lang=$('#language').value;
@@ -73,7 +103,13 @@ function replyFor(text){
  return 'Pesan diterima, Arief: “'+text+'”. Versi awal GOKU sudah mendukung antarmuka chat dan suara, tetapi belum tersambung ke layanan AI online. Integrasi AI memerlukan server aman dan API key yang tidak boleh ditaruh di aplikasi HP.';
 }
 function speak(text){if(!('speechSynthesis'in window))return; speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=$('#voice').value;u.rate=1; speechSynthesis.speak(u)}
-function send(text){text=text.trim();if(!text)return;add(text,'user');$('#prompt').value='';lastReply=replyFor(text);add(lastReply,'bot');}
+async function send(text){
+ text=text.trim();if(!text)return;add(text,'user');$('#prompt').value='';
+ const pending=add('GOKU sedang berpikir…','bot');
+ try{const reply=await callGoku(text);pending.textContent=reply;lastReply=reply;chatHistory.push({role:'user',content:text},{role:'assistant',content:reply});while(chatHistory.length>10)chatHistory.shift()}
+ catch(e){pending.textContent='Belum bisa menjawab dengan AI online. '+e.message;lastReply=pending.textContent}
+ messages.scrollTop=messages.scrollHeight;
+}
 $('#form').addEventListener('submit',e=>{e.preventDefault();send($('#prompt').value)});
 $('#mic').addEventListener('click',()=>{
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
