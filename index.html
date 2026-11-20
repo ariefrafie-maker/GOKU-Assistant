@@ -152,92 +152,109 @@ if('serviceWorker'in navigator && location.protocol.startsWith('http')) navigato
 <script type="module">
 try {
   const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js');
-  const canvas = document.getElementById('goku3d');
-  const stage = document.getElementById('avatarStage');
-  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true, powerPreference:'low-power'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-  renderer.setSize(stage.clientWidth, stage.clientHeight, false);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.setClearColor(0x000000,0);
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, stage.clientWidth/stage.clientHeight, .1, 100);
-  camera.position.set(0,1.55,6.7);
-  camera.lookAt(0,1.2,0);
-  scene.add(new THREE.HemisphereLight(0xd8efff,0x15233a,2.0));
-  const key = new THREE.DirectionalLight(0xffdfa0,3.1); key.position.set(-3,5,5); scene.add(key);
-  const rim = new THREE.PointLight(0x3c9dff,22,12); rim.position.set(3,2,2); scene.add(rim);
-  const gold = new THREE.MeshStandardMaterial({color:0xe8a83f,metalness:.55,roughness:.28});
-  const pale = new THREE.MeshStandardMaterial({color:0xe5edf5,metalness:.72,roughness:.25});
-  const blue = new THREE.MeshStandardMaterial({color:0x17609b,metalness:.55,roughness:.3});
-  const dark = new THREE.MeshStandardMaterial({color:0x10253d,metalness:.45,roughness:.35});
-  const glow = new THREE.MeshStandardMaterial({color:0x63caff,emissive:0x087acb,emissiveIntensity:2.4,metalness:.2});
-  const face = new THREE.MeshStandardMaterial({color:0xffd78d,metalness:.2,roughness:.45});
-  const root = new THREE.Group(); scene.add(root);
-  const sphere=(parent,mat,pos,scale)=>{const m=new THREE.Mesh(new THREE.SphereGeometry(1,24,18),mat);m.position.set(...pos);m.scale.set(...scale);parent.add(m);return m};
-  const cylinder=(parent,mat,r1,r2,h,pos)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,18),mat);m.position.set(...pos);parent.add(m);return m};
-  const torso=sphere(root,blue,[0,1.1,0],[.56,.68,.34]);
-  sphere(root,pale,[0,1.18,.30],[.38,.43,.08]);
-  sphere(root,dark,[0,1.18,.39],[.25,.29,.045]);
-  sphere(root,gold,[0,1.18,.445],[.105,.105,.04]);
-  const neck=cylinder(root,gold,.15,.15,.18,[0,1.77,0]);
-  const head=new THREE.Group(); head.position.set(0,2.12,0); root.add(head);
-  sphere(head,face,[0,0,0],[.55,.48,.43]);
-  sphere(head,dark,[0,.34,-.02],[.58,.22,.45]);
-  // visor-like front brow and luminous eyes
-  sphere(head,blue,[0,.22,.33],[.47,.12,.13]);
-  const eyeMat=new THREE.MeshStandardMaterial({color:0x071c30,emissive:0x42c8ff,emissiveIntensity:2.5});
-  const eyeLeft=sphere(head,eyeMat,[-.19,.02,.395],[.075,.095,.035]);
-  const eyeRight=sphere(head,eyeMat,[.19,.02,.395],[.075,.095,.035]);
-  const mouth=sphere(head,dark,[0,-.18,.405],[.12,.035,.025]);
-  // antenna and ear discs
-  cylinder(head,gold,.035,.055,.28,[0,.62,0]);
-  sphere(head,glow,[0,.78,0],[.09,.09,.09]);
-  sphere(head,gold,[-.55,0,0],[.13,.2,.18]); sphere(head,gold,[.55,0,0],[.13,.2,.18]);
+  const canvas=document.getElementById('goku3d'), stage=document.getElementById('avatarStage');
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+  renderer.setSize(stage.clientWidth,stage.clientHeight,false);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(31,stage.clientWidth/stage.clientHeight,.1,100);
+  camera.position.set(0,1.65,7.7);camera.lookAt(0,1.45,0);
+  scene.add(new THREE.HemisphereLight(0xe9f3ff,0x46301d,2.0));
+  const key=new THREE.DirectionalLight(0xffe0b5,3.2);key.position.set(-3,5,5);scene.add(key);
+  const fill=new THREE.DirectionalLight(0x7bbcff,1.2);fill.position.set(4,2,2);scene.add(fill);
+  const skin=new THREE.MeshStandardMaterial({color:0xe6a879,roughness:.72});
+  const hair=new THREE.MeshStandardMaterial({color:0x11141b,roughness:.42});
+  const orange=new THREE.MeshStandardMaterial({color:0xf06a16,roughness:.58});
+  const blue=new THREE.MeshStandardMaterial({color:0x174d9b,roughness:.52});
+  const beltMat=new THREE.MeshStandardMaterial({color:0x164b96,roughness:.62});
+  const bootMat=new THREE.MeshStandardMaterial({color:0x173a70,roughness:.55});
+  const white=new THREE.MeshStandardMaterial({color:0xf1e7d8,roughness:.6});
+  const eyeWhite=new THREE.MeshStandardMaterial({color:0xfff5e9,roughness:.45});
+  const iris=new THREE.MeshStandardMaterial({color:0x34251d,roughness:.35});
+  const dark=new THREE.MeshStandardMaterial({color:0x241812,roughness:.6});
+  const root=new THREE.Group();scene.add(root);
+  const sphere=(p,m,pos,sc)=>{const o=new THREE.Mesh(new THREE.SphereGeometry(1,28,20),m);o.position.set(...pos);o.scale.set(...sc);p.add(o);return o};
+  const cylinder=(p,m,r1,r2,h,pos)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,20),m);o.position.set(...pos);p.add(o);return o};
+  const limb=(p,m,a,b,rA,rB)=>{const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),d=new THREE.Vector3().subVectors(B,A);const o=new THREE.Mesh(new THREE.CylinderGeometry(rB,rA,d.length(),18),m);o.position.copy(A).add(B).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());p.add(o);return o};
+  // Adult human fighter proportions: orange gi, blue undershirt, natural skin and spiky black hair.
+  sphere(root,orange,[0,1.48,0],[.57,.72,.34]); // gi torso
+  sphere(root,blue,[0,1.76,.025],[.39,.40,.355]); // blue undershirt at collar/chest
+  // Orange gi front panels
+  const giPanel=sphere(root,orange,[0,1.43,.275],[.46,.54,.11]);
+  cylinder(root,beltMat,.43,.43,.13,[0,.92,0]);
+  sphere(root,blue,[0,.92,.33],[.12,.07,.045]);
+  cylinder(root,skin,.17,.17,.22,[0,2.12,0]);
+  // neck and head
+  const head=new THREE.Group();head.position.set(0,2.48,.02);root.add(head);
+  sphere(head,skin,[0,0,0],[.43,.53,.38]);
+  sphere(head,skin,[-.43,-.02,0],[.09,.15,.12]);sphere(head,skin,[.43,-.02,0],[.09,.15,.12]);
+  // hair cap and unmistakable upright spikes
+  sphere(head,hair,[0,.36,-.015],[.46,.32,.4]);
+  const spike=(x,y,z,rx,rz,rotX=0,rotZ=0)=>{const o=new THREE.Mesh(new THREE.ConeGeometry(.17,.62,12),hair);o.position.set(x,y,z);o.rotation.set(rotX,0,rotZ);o.scale.set(rx,1,rz);head.add(o)};
+  spike(-.28,.68,-.02,1,1,-.22,-.42);
+  spike(-.08,.78,-.02,1,1,-.12,-.12);
+  spike(.15,.78,-.02,1,1,.10,.16);
+  spike(.34,.65,-.02,1,1,.25,.48);
+  spike(-.42,.43,.03,.82,.8,-.1,-.85);
+  spike(.42,.43,.03,.82,.8,.1,.85);
+  // expressive eyes, brows, nose and mouth
+  sphere(head,eyeWhite,[-.16,.02,.345],[.105,.065,.045]);sphere(head,eyeWhite,[.16,.02,.345],[.105,.065,.045]);
+  sphere(head,iris,[-.15,.015,.388],[.035,.045,.018]);sphere(head,iris,[.17,.015,.388],[.035,.045,.018]);
+  limb(head,dark,[-.27,.14,.35],[-.07,.17,.36],.035,.028);
+  limb(head,dark,[.07,.17,.36],[.27,.14,.35],.028,.035);
+  sphere(head,skin,[0,-.12,.365],[.07,.10,.07]);
+  limb(head,dark,[-.09,-.27,.33],[.09,-.27,.33],.018,.018);
+  // muscular arms, blue wrist bands and fists
   const arms=[];
   for(const side of [-1,1]){
-    const pivot=new THREE.Group(); pivot.position.set(side*.53,1.48,0); root.add(pivot);
-    cylinder(pivot,pale,.14,.13,.48,[0,-.28,0]);
-    sphere(pivot,gold,[0,-.55,.02],[.16,.16,.16]);
-    sphere(pivot,glow,[0,-.28,.13],[.07,.07,.04]);
+    const pivot=new THREE.Group();pivot.position.set(side*.48,1.86,0);root.add(pivot);
+    sphere(pivot,orange,[side*.11,-.08,0],[.23,.25,.25]);
+    limb(pivot,skin,[side*.12,-.12,0],[side*.22,-.48,.02],.16,.125);
+    sphere(pivot,skin,[side*.22,-.49,.02],[.14,.14,.14]);
+    cylinder(pivot,blue,.14,.14,.12,[side*.22,-.60,.02]);
+    sphere(pivot,skin,[side*.22,-.76,.05],[.14,.16,.14]);
     arms.push(pivot);
   }
+  // orange trousers and blue boots
   const legs=[];
   for(const side of [-1,1]){
-    const pivot=new THREE.Group(); pivot.position.set(side*.25,.62,0); root.add(pivot);
-    cylinder(pivot,pale,.17,.15,.55,[0,-.27,0]);
-    sphere(pivot,dark,[0,-.57,.12],[.22,.13,.32]);
-    sphere(pivot,gold,[0,-.1,.02],[.18,.08,.18]);
+    const pivot=new THREE.Group();pivot.position.set(side*.24,.91,0);root.add(pivot);
+    limb(pivot,orange,[0,-.02,0],[side*.035,-.57,0],.24,.18);
+    sphere(pivot,orange,[side*.035,-.55,0],[.19,.18,.2]);
+    limb(pivot,blue,[side*.035,-.62,0],[side*.04,-.92,.015],.17,.145);
+    sphere(pivot,bootMat,[side*.04,-.96,.10],[.19,.13,.27]);
+    cylinder(pivot,white,.15,.15,.055,[side*.04,-.81,.01]);
     legs.push(pivot);
   }
-  // floating holographic base
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(.72,.018,8,64),glow);ring.rotation.x=Math.PI/2;ring.position.y=-.08;root.add(ring);
-  const floor=new THREE.Mesh(new THREE.CircleGeometry(.8,48),new THREE.MeshBasicMaterial({color:0x1b6ba0,transparent:true,opacity:.12}));floor.rotation.x=-Math.PI/2;floor.position.y=-.1;root.add(floor);
-  let state='idle', last=0, blinkAt=2.2, blinkEnd=0;
-  window.setGokuAvatarState=(next)=>{state=next||'idle';};
-  const resize=()=>{const w=stage.clientWidth||240,h=stage.clientHeight||220;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
-  new ResizeObserver(resize).observe(stage); resize();
-  stage.classList.add('webgl-ready');
+  // Subtle ground glow, not a mechanical platform
+  const aura=new THREE.Mesh(new THREE.CircleGeometry(.78,48),new THREE.MeshBasicMaterial({color:0x398bd8,transparent:true,opacity:.13}));
+  aura.rotation.x=-Math.PI/2;aura.position.y=-.12;root.add(aura);
+  let state='idle',last=0,blinkAt=2.5,blinkEnd=0;
+  window.setGokuAvatarState=(s)=>{state=s||'idle';};
+  const resize=()=>{const w=stage.clientWidth||240,h=stage.clientHeight||230;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
+  new ResizeObserver(resize).observe(stage);resize();stage.classList.add('webgl-ready');
   function animate(t){
-    requestAnimationFrame(animate);
-    const s=t/1000, dt=Math.min(.05,s-last||.016);last=s;
-    root.position.y=.04+Math.sin(s*2.2)*.07;
-    root.rotation.y=Math.sin(s*.45)*.18;
-    arms[0].rotation.z=.12+Math.sin(s*2.6)*.16;
-    arms[1].rotation.z=-.12-Math.sin(s*2.6)*.16;
-    legs[0].rotation.x=Math.sin(s*2.6)*.06; legs[1].rotation.x=-Math.sin(s*2.6)*.06;
-    if(state==='listening'){head.rotation.y=Math.sin(s*3)*.16;root.rotation.y=Math.sin(s*2)*.24;}
-    else if(state==='thinking'){head.rotation.z=Math.sin(s*1.8)*.08;root.rotation.y=Math.sin(s*1.4)*.32;}
-    else {head.rotation.y=Math.sin(s*.7)*.06;head.rotation.z=0;}
-    if(state==='speaking'){mouth.scale.y=.035+Math.abs(Math.sin(s*17))*.11;} else mouth.scale.y=.035;
-    if(s>blinkAt){blinkEnd=s+.14;blinkAt=s+2.5+Math.random()*2.5;}
-    const blinkScale=s<blinkEnd?.08:1;eyeLeft.scale.y=.095*blinkScale;eyeRight.scale.y=.095*blinkScale;
-    ring.rotation.z=s*.35;
+    requestAnimationFrame(animate);const s=t/1000;last=s;
+    root.position.y=.035+Math.sin(s*2.1)*.035;
+    root.rotation.y=Math.sin(s*.48)*.13;
+    arms[0].rotation.z=-.04+Math.sin(s*2.2)*.10;
+    arms[1].rotation.z=.04-Math.sin(s*2.2)*.10;
+    legs[0].rotation.x=Math.sin(s*2.2)*.035;legs[1].rotation.x=-Math.sin(s*2.2)*.035;
+    if(state==='listening'){head.rotation.y=Math.sin(s*2.8)*.14;head.rotation.x=-.06;}
+    else if(state==='thinking'){head.rotation.y=Math.sin(s*1.6)*.18;head.rotation.z=Math.sin(s*1.8)*.04;}
+    else{head.rotation.x=0;head.rotation.y=Math.sin(s*.65)*.055;head.rotation.z=0;}
+    if(state==='speaking'){head.children[13].scale.y=.04+Math.abs(Math.sin(s*15))*.07;}
+    else head.children[13].scale.y=.035;
+    if(s>blinkAt){blinkEnd=s+.13;blinkAt=s+2.4+Math.random()*2.7;}
+    const blinkScale=s<blinkEnd?.08:1;
+    head.children[8].scale.y=.065*blinkScale;head.children[9].scale.y=.065*blinkScale;
     renderer.render(scene,camera);
   }
   requestAnimationFrame(animate);
-} catch (err) {
+}catch(err){
   const status=document.getElementById('avatarStatus');
-  if(status) status.textContent='Mode karakter ringan aktif. Koneksi grafis 3D tidak tersedia di browser ini.';
-  console.warn('GOKU 3D fallback:',err);
+  if(status)status.textContent='Karakter GOKU manusia 3D belum dapat dimuat pada browser ini.';
+  console.warn('GOKU human 3D:',err);
 }
 </script></body></html>
