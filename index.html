@@ -164,15 +164,21 @@ try {
   const key=new THREE.DirectionalLight(0xffe0b5,3.2);key.position.set(-3,5,5);scene.add(key);
   const fill=new THREE.DirectionalLight(0x7bbcff,1.2);fill.position.set(4,2,2);scene.add(fill);
   const skin=new THREE.MeshStandardMaterial({color:0xe6a879,roughness:.72});
-  const hair=new THREE.MeshStandardMaterial({color:0x11141b,roughness:.42});
+  const hair=new THREE.MeshStandardMaterial({color:0xdde8f4,metalness:.38,roughness:.24,emissive:0x7188a8,emissiveIntensity:.42});
   const orange=new THREE.MeshStandardMaterial({color:0xf06a16,roughness:.58});
   const blue=new THREE.MeshStandardMaterial({color:0x174d9b,roughness:.52});
   const beltMat=new THREE.MeshStandardMaterial({color:0x164b96,roughness:.62});
   const bootMat=new THREE.MeshStandardMaterial({color:0x173a70,roughness:.55});
   const white=new THREE.MeshStandardMaterial({color:0xf1e7d8,roughness:.6});
   const eyeWhite=new THREE.MeshStandardMaterial({color:0xfff5e9,roughness:.45});
-  const iris=new THREE.MeshStandardMaterial({color:0x34251d,roughness:.35});
+  const iris=new THREE.MeshStandardMaterial({color:0x9eb7d1,metalness:.25,roughness:.2,emissive:0x4e7199,emissiveIntensity:.35});
   const dark=new THREE.MeshStandardMaterial({color:0x241812,roughness:.6});
+  const auraGroup=new THREE.Group();scene.add(auraGroup);
+  const auraMat=new THREE.MeshBasicMaterial({color:0xb8d8ff,transparent:true,opacity:.18,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false});
+  const auraShell=new THREE.Mesh(new THREE.SphereGeometry(1,32,24),auraMat);auraShell.scale.set(.92,1.75,.48);auraShell.position.y=1.35;auraGroup.add(auraShell);
+  const auraRingMat=new THREE.MeshBasicMaterial({color:0xe4f2ff,transparent:true,opacity:.62,blending:THREE.AdditiveBlending,depthWrite:false});
+  const auraRings=[];for(let i=0;i<3;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(.72+i*.10,.012,8,64),auraRingMat);r.position.y=.75+i*.65;r.scale.set(1,1.35,1);auraGroup.add(r);auraRings.push(r);}
+  const auraSparks=[];for(let i=0;i<22;i++){const p=new THREE.Mesh(new THREE.SphereGeometry(.018+(i%3)*.008,8,6),new THREE.MeshBasicMaterial({color:i%2?0x9ccfff:0xffffff,transparent:true,opacity:.85,blending:THREE.AdditiveBlending}));const a=i*2.399;const rad=.58+(i%4)*.12;p.position.set(Math.cos(a)*rad,.2+(i%11)*.29,Math.sin(a)*.28-.25);auraGroup.add(p);auraSparks.push(p);}
   const root=new THREE.Group();scene.add(root);
   const sphere=(p,m,pos,sc)=>{const o=new THREE.Mesh(new THREE.SphereGeometry(1,28,20),m);o.position.set(...pos);o.scale.set(...sc);p.add(o);return o};
   const cylinder=(p,m,r1,r2,h,pos)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,20),m);o.position.set(...pos);p.add(o);return o};
@@ -228,7 +234,7 @@ try {
     legs.push(pivot);
   }
   // Subtle ground glow, not a mechanical platform
-  const aura=new THREE.Mesh(new THREE.CircleGeometry(.78,48),new THREE.MeshBasicMaterial({color:0x398bd8,transparent:true,opacity:.13}));
+  const aura=new THREE.Mesh(new THREE.CircleGeometry(.92,48),new THREE.MeshBasicMaterial({color:0x9bcfff,transparent:true,opacity:.23,blending:THREE.AdditiveBlending}));
   aura.rotation.x=-Math.PI/2;aura.position.y=-.12;root.add(aura);
   let state='idle',last=0,blinkAt=2.5,blinkEnd=0;
   window.setGokuAvatarState=(s)=>{state=s||'idle';};
@@ -237,6 +243,9 @@ try {
   function animate(t){
     requestAnimationFrame(animate);const s=t/1000;last=s;
     root.position.y=.035+Math.sin(s*2.1)*.035;
+    auraGroup.position.y=.02+Math.sin(s*2.7)*.045;auraShell.scale.set(.88+Math.sin(s*3)*.045,1.72+Math.sin(s*2.2)*.06,.46);
+    auraRings.forEach((r,i)=>{r.rotation.y=s*(i%2?-.55:.42);r.rotation.x=Math.sin(s*1.7+i)*.16;});
+    auraSparks.forEach((p,i)=>{p.position.y=.15+((i*.19+s*(.5+(i%3)*.18))%2.5);p.material.opacity=.35+.55*Math.abs(Math.sin(s*3+i));});
     root.rotation.y=Math.sin(s*.48)*.13;
     arms[0].rotation.z=-.04+Math.sin(s*2.2)*.10;
     arms[1].rotation.z=.04-Math.sin(s*2.2)*.10;
