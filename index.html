@@ -186,8 +186,8 @@ try {
   // visor-like front brow and luminous eyes
   sphere(head,blue,[0,.22,.33],[.47,.12,.13]);
   const eyeMat=new THREE.MeshStandardMaterial({color:0x071c30,emissive:0x42c8ff,emissiveIntensity:2.5});
-  sphere(head,eyeMat,[-.19,.02,.395],[.075,.095,.035]);
-  sphere(head,eyeMat,[.19,.02,.395],[.075,.095,.035]);
+  const eyeLeft=sphere(head,eyeMat,[-.19,.02,.395],[.075,.095,.035]);
+  const eyeRight=sphere(head,eyeMat,[.19,.02,.395],[.075,.095,.035]);
   const mouth=sphere(head,dark,[0,-.18,.405],[.12,.035,.025]);
   // antenna and ear discs
   cylinder(head,gold,.035,.055,.28,[0,.62,0]);
@@ -230,7 +230,7 @@ try {
     else {head.rotation.y=Math.sin(s*.7)*.06;head.rotation.z=0;}
     if(state==='speaking'){mouth.scale.y=.035+Math.abs(Math.sin(s*17))*.11;} else mouth.scale.y=.035;
     if(s>blinkAt){blinkEnd=s+.14;blinkAt=s+2.5+Math.random()*2.5;}
-    const blinkScale=s<blinkEnd?.08:1;head.children[4].scale.y=.095*blinkScale;head.children[5].scale.y=.095*blinkScale;
+    const blinkScale=s<blinkEnd?.08:1;eyeLeft.scale.y=.095*blinkScale;eyeRight.scale.y=.095*blinkScale;
     ring.rotation.z=s*.35;
     renderer.render(scene,camera);
   }
